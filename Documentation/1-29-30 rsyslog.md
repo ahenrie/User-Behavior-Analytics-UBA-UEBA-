@@ -19,7 +19,7 @@ license: "MIT"
 - **Storage:** 1TB for log retention
 
 
-![Image](logserverInfo.png)
+![Image](./pics/logserverInfo.png)
 
 
 **TCP is the only protocol I used for a gurantee of log delivery.**
@@ -73,7 +73,7 @@ sudo netstat -tulnp | grep 514
 ```
 
 If done correctly, you will see listening ports open:
-![Image](netstat.png)
+![Image](./pics/netstat.png)
 
 If `netstat` is not installed, you can install it using:
 ```sh
