@@ -1,4 +1,4 @@
-# User-Behavior-Analytics-UBA-UEBA-
+# User-Behavior-Analytics-UBA-UEBA
 
 ## Key Areas of Focus for Insider Threat Detection:
 - User Behavior Analytics (UBA/UEBA) – Detects deviations from normal user behavior.
