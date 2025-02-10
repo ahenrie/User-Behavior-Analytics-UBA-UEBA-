@@ -7,7 +7,7 @@
 - Privilege Misuse – Monitors users with admin access for unusual activities.
 - Process & Application Monitoring – Detects unauthorized tools or scripts being executed.
 
-## Log Sources You Could Fabricate:
+## Log Sources Could Fabricate:
 - Authentication logs (Active Directory, Okta, or IAM logs)
 - File access logs (sensitive data access patterns)
 - Network logs (VPN, proxy, DNS queries)
