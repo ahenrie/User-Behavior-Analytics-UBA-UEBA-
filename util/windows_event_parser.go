@@ -1,4 +1,4 @@
-package logparse
+package util
 
 import (
 	"bufio"
@@ -44,9 +44,12 @@ func ParseLogs() {
 
 	//Read line by line once the file is open
 	scanner := bufio.NewScanner(file)
+	counter := 1
 	for scanner.Scan() {
 		logLine := scanner.Text()
-		fmt.Printf("Processing log line: %s", logLine)
+		fmt.Printf("Processing log line: %d\n", counter)
 		users[getUsers(logLine)]++
+		counter++
 	}
+
 }
