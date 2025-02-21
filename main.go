@@ -7,6 +7,6 @@ import (
 )
 
 func main() {
-	fmt.Println("Start Parsing logs:")
+	fmt.Println("############### Start Parsing logs ###############")
 	util.ParseLogs()
 }
