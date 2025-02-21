@@ -13,13 +13,28 @@ import (
 
 // Extract username from logs
 func getUsers(logLine string) string {
-	pattern := `User Name:#011(\w+)`
-	re := regexp.MustCompile(pattern)
-	matches := re.FindStringSubmatch(logLine)
-	if len(matches) > 1 {
-		return matches[1]
+	// Pattern for 'User Name:#011'
+	pattern1 := `User Name:#011(\w+)`
+	// Pattern for 'User: DESKTOP-RKJA15K\USERNAME'
+	pattern2 := `User: \S+\\([^\s]+)`
+
+	// Compile both regex patterns
+	re1 := regexp.MustCompile(pattern1)
+	re2 := regexp.MustCompile(pattern2)
+
+	// Try matching the first pattern
+	matches1 := re1.FindStringSubmatch(logLine)
+	if len(matches1) > 1 {
+		return matches1[1]
 	}
-	return "System"
+
+	// Try matching the second pattern
+	matches2 := re2.FindStringSubmatch(logLine)
+	if len(matches2) > 1 {
+		return matches2[1] // Return the username found in the second pattern
+	}
+
+	return "System" // Return "System" if no match is found
 }
 
 // Extract timestamp and convert to Unix time
@@ -93,7 +108,35 @@ func extractFeatures(logLine string) []string {
 		getUsers(logLine),
 		getServiceName(logLine),
 		getLogMessage(logLine),
+		getAppName(logLine),
 	}
+}
+
+func getAppName(logLine string) string {
+	// Pattern for extracting any executable name ending in .exe
+	pattern := `Process '\\Device\\[^\s]+\\([^\\]+\.exe)'`
+	re := regexp.MustCompile(pattern)
+
+	// Find the match
+	matches := re.FindStringSubmatch(logLine)
+
+	if len(matches) > 1 {
+		return matches[1] // Return the executable name (e.g., opera.exe)
+	}
+
+	// If no match, check for .exe elsewhere in the line
+	// This looks for any word ending in .exe
+	alternatePattern := `\b([^\s]+\.exe)\b`
+	reAlt := regexp.MustCompile(alternatePattern)
+
+	// Try to find the executable name elsewhere
+	matchesAlt := reAlt.FindStringSubmatch(logLine)
+
+	if len(matchesAlt) > 0 {
+		return matchesAlt[0] // Return the executable name found elsewhere
+	}
+
+	return "Null" // Return default if no match is found
 }
 
 // Read logs and write extracted features to CSV
@@ -121,13 +164,19 @@ func ParseLogs() {
 	defer writer.Flush()
 
 	// Write CSV header
-	header := []string{"Timestamp", "Hostname", "EventID", "User", "ServiceName", "Message"}
+	header := []string{"Timestamp", "Hostname", "EventID", "User", "ServiceName", "Message", "Exe"}
 	writer.Write(header)
 
 	// Read and process log lines
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		logLine := scanner.Text()
+
+		// Test for a propper eventID
+		if getEventID(logLine) == "Null" {
+			continue
+		}
+
 		features := extractFeatures(logLine)
 		writer.Write(features)
 	}
