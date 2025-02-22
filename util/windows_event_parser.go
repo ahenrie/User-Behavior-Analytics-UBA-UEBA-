@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -55,15 +56,17 @@ func getTimestamp(logLine string) int64 {
 	return 0
 }
 
-// Extract EventID from logs
-func getEventID(logLine string) string {
+func getProcessID(logLine string) int {
 	pattern := `\[(\d+)\]`
 	re := regexp.MustCompile(pattern)
 	matches := re.FindStringSubmatch(logLine)
 	if len(matches) > 1 {
-		return matches[1]
+		processID, err := strconv.Atoi(matches[1])
+		if err == nil {
+			return processID
+		}
 	}
-	return "Null"
+	return 0
 }
 
 // Extract Service/Process Name
@@ -104,7 +107,7 @@ func extractFeatures(logLine string) []string {
 	return []string{
 		fmt.Sprintf("%d", getTimestamp(logLine)), // Unix Timestamp as string
 		getHostName(logLine),
-		getEventID(logLine),
+		fmt.Sprintf("%d", getProcessID(logLine)), // Convert to string
 		getUsers(logLine),
 		getServiceName(logLine),
 		getLogMessage(logLine),
@@ -173,7 +176,7 @@ func ParseLogs() {
 		logLine := scanner.Text()
 
 		// Test for a propper eventID
-		if getEventID(logLine) == "Null" {
+		if getProcessID(logLine) == 0 {
 			continue
 		}
 
