@@ -1,10 +1,10 @@
 #!/bin/bash
 
 LOG_FILE="/var/log/10.10.10.log"
-OUTPUT_DIR="$HOME/CSVs/"
+OUTPUT_DIR="$HOME/CSVs"
 REMOTE_USER="based"
 REMOTE_HOST="10.10.10.70"
-REMOTE_DIR="$HOME/ML"
+REMOTE_DIR="$HOME/ML/data"
 LAST_PROCESSED_FILE="$OUTPUT_DIR/last_position"
 
 # Ensure the output directory exists
