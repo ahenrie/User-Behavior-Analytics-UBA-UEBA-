@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 fake = Faker()
 
 # Load the CSV file containing the original logs
-df = pd.read_csv('../genuineLogs/parsed.csv')
+df = pd.read_csv('test.csv')
 
 # Function to generate a random event time
 def generate_random_time():
@@ -56,7 +56,7 @@ def generate_fake_log():
     }
 
 # Generate fake logs and save them to a new CSV
-fake_logs = [generate_fake_log() for _ in range(10000000)]
+fake_logs = [generate_fake_log() for _ in range(100)]
 fake_logs_df = pd.DataFrame(fake_logs)
 
 # Save the fake logs to a CSV file
