@@ -39,10 +39,10 @@ Before creating fake Windows Event logs, I need to understand what are in them, 
 23. `AccountName`--> The username of the user account that performed an action.
 24. `UserID`--> The ID associated with each user.
 25. `AccountType`--> The type of the account of the user.
-26. `LogonType`-->
-27. `IpAddress`-->
-28. `IpPort`-->
-29. `DeviceInstanceId`-->
+26. `LogonType`--> This policy setting allows you to manage settings for logon options.
+27. `IpAddress`--> Address IP
+28. `IpPort`--> Port
+29. `DeviceInstanceId`--> Refers to a unique identifier assigned to each device on a system.
 30. `DeviceCount`-->
 31. `Opcode`-->
 32. `PackageFullName`-->
@@ -60,3 +60,4 @@ Before creating fake Windows Event logs, I need to understand what are in them, 
 - https://learn.microsoft.com/en-us/windows/win32/EventLog/event-logging
 - https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.eventing.reader.eventlogrecord.threadid?view=windowsdesktop-9.0
 - https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-even6/f628d868-3810-4efe-bf44-c6e6901bf30e
+- https://admx.help/?Category=InternetExplorer&Policy=Microsoft.Policies.InternetExplorer::IZ_PolicyLogon_9
