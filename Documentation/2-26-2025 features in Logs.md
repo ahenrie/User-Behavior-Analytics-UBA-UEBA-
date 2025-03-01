@@ -44,15 +44,15 @@ Before creating fake Windows Event logs, I need to understand what are in them, 
 28. `IpPort`--> Port
 29. `DeviceInstanceId`--> Refers to a unique identifier assigned to each device on a system.
 30. `DeviceCount`-->
-31. `Opcode`-->
-32. `PackageFullName`-->
-33. `AppUserModelId`-->
+31. `Opcode`--> A numeric value that identifies the activity of an application when an event occur
+32. `PackageFullName`--> Refers to the unique identifier for a packaged application, typically found within the details of an event related to the installation, deployment, or operation of a Windows Store app.
+33. `AppUserModelId`--> Pretty much the same thing as PackageFullName
 34. `AppSettings`-->
-35. `FunctionName`-->
-36. `ErrorCode`-->
-37. `SourceModuleName`-->
-38. `SourceModuleType`-->
-39. `Message`-->
+35. `FunctionName`--> Identifier for a system error that we can disregard
+36. `ErrorCode`--> Error code of the event if there is an error
+37. `SourceModuleName`--> This will be the Nxlog module.
+38. `SourceModuleType`--> This will be the Nxlog module.
+39. `Message`--> Message
 
 
 ## Sources
