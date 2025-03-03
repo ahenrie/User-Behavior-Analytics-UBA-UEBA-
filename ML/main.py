@@ -1,8 +1,12 @@
-import pandas as pd
+from cleaner import CleanedDF
+from pikl_maker import IsolationForestModel
 
+if __name__ == "__main__":
+    cleaned_data = CleanedDF('test.csv')
+    cleaned_data.preprocessing()
+    cleaned_data.printInfo()
 
-df = pd.read_csv('test.csv')
+    newModel = IsolationForestModel(cleaned_data.df)
+    newModel.train()
 
-
-print(df.info())
-print(df["AccountName"].unique())
+    newModel.save_model()
