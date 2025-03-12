@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Real-Time Anomaly Detection</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                function fetchAnomalies() {
+                    $.getJSON("/get_anomalies", function (anomalies) {
+                        $("#anomalies").empty();
+                        if (anomalies.length > 0) {
+                            anomalies.forEach(function (anomaly) {
+                                $("#anomalies").append(
+                                    "<p>" + JSON.stringify(anomaly) + "</p>",
+                                );
+                            });
+                        } else {
+                            $("#anomalies").append(
+                                "<p>No new anomalies detected.</p>",
+                            );
+                        }
+                    });
+                }
+                setInterval(fetchAnomalies, 10000); // Poll every 10 seconds
+                fetchAnomalies(); // Initial fetch
+            });
+        </script>
+    </head>
+    <body>
+        <h1>Real-Time Anomaly Detection</h1>
+        <div id="anomalies"></div>
+    </body>
+</html>
