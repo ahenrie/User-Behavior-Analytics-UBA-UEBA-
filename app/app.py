@@ -14,9 +14,9 @@ PROCESSED_FILES = set()  # Keep track of processed files
 # Load the model once
 model = IsolationForestModel(MODEL_PATH)
 model.load_model()  # Load the trained model
-
+"""
 def process_file(filepath):
-    """Process a single CSV log file."""
+    #Process a single CSV log file.
     try:
         data = CleanedDF(filepath)
         data.preprocess()
@@ -28,6 +28,38 @@ def process_file(filepath):
     except Exception as e:
         print(f"Error processing {filepath}: {e}")
         return []
+"""
+def process_file(filepath):
+    """Process a single CSV log file."""
+    try:
+        # Load and clean the data
+        data = CleanedDF(filepath)
+
+        # Store the original columns before preprocessing
+        original_data = data.df[['EventTime', 'EventID', 'Severity', 'AccountName', 'IpAddress', 'Message']].copy()
+
+        # Preprocess the data (this will modify the dataframe)
+        data.preprocess()
+
+        # Perform anomaly prediction
+        predictions, anomaly_scores = model.predict(data.df)
+        data.df["Anomaly"] = predictions
+        anomalies = data.df[data.df["Anomaly"] == -1]
+
+        # Add the original data back to the anomalies dataframe
+        anomalies["EventTime"] = original_data.loc[anomalies.index, "EventTime"]
+        anomalies["EventID"] = original_data.loc[anomalies.index, "EventID"]
+        anomalies["Severity"] = original_data.loc[anomalies.index, "Severity"]
+        anomalies["AccountName"] = original_data.loc[anomalies.index, "AccountName"]
+        anomalies["IpAddress"] = original_data.loc[anomalies.index, "IpAddress"]
+        anomalies["Message"] = original_data.loc[anomalies.index, "Message"]
+
+        # Return the anomalies with the original fields
+        return anomalies[['EventTime', 'EventID', 'Severity', 'AccountName', 'IpAddress', 'Message']].to_dict(orient="records")
+    except Exception as e:
+        print(f"Error processing {filepath}: {e}")
+        return []
+
 
 def get_new_files():
     """Find new CSV files in the data directory."""
@@ -51,4 +83,4 @@ def get_anomalies():
     return jsonify(all_anomalies)
 
 if __name__ == "__main__":
-    app.run(port=8080,debug=True)
+    app.run(port=5000, debug=True)

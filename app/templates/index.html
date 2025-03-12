@@ -1,33 +1,73 @@
 <!doctype html>
-<html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Real-Time Anomaly Detection</title>
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='styles.css') }}"
+        />
+
         <script>
             $(document).ready(function () {
+                let anomaliesSeen = [];
+
                 function fetchAnomalies() {
-                    $.getJSON("/get_anomalies", function (anomalies) {
-                        $("#anomalies").empty();
-                        if (anomalies.length > 0) {
-                            anomalies.forEach(function (anomaly) {
-                                $("#anomalies").append(
-                                    "<p>" + JSON.stringify(anomaly) + "</p>",
-                                );
+                    $.getJSON("/get_anomalies", function (newAnomalies) {
+                        let tableBody = $("#anomalies-table tbody");
+
+                        // Merge the new anomalies with the previously seen anomalies
+                        anomaliesSeen = anomaliesSeen.concat(newAnomalies);
+
+                        // Clear table and append all anomalies in the list
+                        tableBody.empty();
+                        if (anomaliesSeen.length > 0) {
+                            anomaliesSeen.forEach(function (anomaly) {
+                                let row = `<tr>
+                                    <td>${anomaly.EventTime}</td>
+                                    <td>${anomaly.EventID}</td>
+                                    <td>${anomaly.Severity}</td>
+                                    <td>${anomaly.AccountName}</td>
+                                    <td>${anomaly.IpAddress}</td>
+                                    <td>${anomaly.Message}</td>
+                                </tr>`;
+                                tableBody.append(row);
                             });
                         } else {
-                            $("#anomalies").append(
-                                "<p>No new anomalies detected.</p>",
+                            tableBody.append(
+                                '<tr><td colspan="7">No new anomalies detected.</td></tr>',
                             );
                         }
                     });
                 }
-                setInterval(fetchAnomalies, 10000); // Poll every 10 seconds
-                fetchAnomalies(); // Initial fetch
+
+                setInterval(fetchAnomalies, 1000); // Poll every second
+                fetchAnomalies(); // Initial fetch to load anomalies
             });
         </script>
     </head>
     <body>
         <h1>Real-Time Anomaly Detection</h1>
-        <div id="anomalies"></div>
+
+        <table id="anomalies-table">
+            <thead>
+                <tr>
+                    <th>Event Time</th>
+                    <th>Event ID</th>
+                    <th>Severity</th>
+                    <th>Account Name</th>
+                    <th>IP Address</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="7">Loading anomalies...</td>
+                </tr>
+            </tbody>
+        </table>
     </body>
 </html>
