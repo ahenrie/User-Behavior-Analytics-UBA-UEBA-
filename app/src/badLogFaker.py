@@ -113,7 +113,7 @@ def generate_synthetic_logs(existing_logs, num_synthetic=100):
 
 logs_df = pd.read_csv('test.csv')
 
-num_synthetic = 10000
+num_synthetic = 100
 synthetic_df = generate_synthetic_logs(logs_df, num_synthetic)
 
 synthetic_df.to_csv('badLogs.csv', index=False)

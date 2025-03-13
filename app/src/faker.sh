@@ -28,5 +28,5 @@ while true; do
     fi
 
     # Wait for 2 seconds before running again
-    sleep 10
+    sleep 30
 done

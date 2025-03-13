@@ -1,0 +1,183 @@
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    margin: 0;
+    background-color: #121212;
+    color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1 {
+    color: #e0e0e0;
+    margin: 20px 0;
+}
+
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #282828;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th,
+td {
+    padding: 15px;
+    border-bottom: 1px solid #333;
+    text-align: left;
+}
+
+th {
+    background-color: #333;
+    color: #fff;
+    font-weight: 600;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover {
+    background-color: #383838;
+    cursor: pointer;
+}
+
+td {
+    color: #e0e0e0;
+}
+
+#scatter-plot {
+    margin: 30px auto;
+    width: 90%;
+}
+
+#scatter-plot > div {
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #1e1e1e;
+}
+
+#anomaly-counts-table {
+    width: 40%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #282828;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#anomaly-counts-table th,
+#anomaly-counts-table td {
+    padding: 12px;
+    border-bottom: 1px solid #333;
+    text-align: left;
+}
+
+#anomaly-counts-table th {
+    background-color: #333;
+    color: #fff;
+    font-weight: 600;
+}
+
+#anomaly-counts-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Styles for Anomalies by User Page */
+#user-anomalies-container {
+    width: 90%;
+    margin: 20px auto;
+    text-align: left;
+}
+
+.user-section {
+    margin-bottom: 30px;
+    background-color: #282828;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.user-section h2 {
+    color: #e0e0e0;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.user-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.user-section table,
+.user-section th,
+.user-section td {
+    border: 1px solid #ddd;
+}
+
+.user-section th,
+.user-section td {
+    padding: 8px;
+    text-align: left;
+}
+
+#chart-container {
+    width: 90%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+#chart-container > div {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-left img {
+    height: 40px; /* Adjust as needed */
+    margin-right: 10px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}

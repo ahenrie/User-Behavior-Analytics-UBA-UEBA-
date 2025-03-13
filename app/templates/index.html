@@ -4,53 +4,28 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Real-Time Anomaly Detection</title>
-
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <link
             rel="stylesheet"
             href="{{ url_for('static', filename='styles.css') }}"
         />
-
-        <script>
-            $(document).ready(function () {
-                let anomaliesSeen = [];
-
-                function fetchAnomalies() {
-                    $.getJSON("/get_anomalies", function (newAnomalies) {
-                        let tableBody = $("#anomalies-table tbody");
-
-                        // Merge the new anomalies with the previously seen anomalies
-                        anomaliesSeen = anomaliesSeen.concat(newAnomalies);
-
-                        // Clear table and append all anomalies in the list
-                        tableBody.empty();
-                        if (anomaliesSeen.length > 0) {
-                            anomaliesSeen.forEach(function (anomaly) {
-                                let row = `<tr>
-                                    <td>${anomaly.EventTime}</td>
-                                    <td>${anomaly.EventID}</td>
-                                    <td>${anomaly.Severity}</td>
-                                    <td>${anomaly.AccountName}</td>
-                                    <td>${anomaly.IpAddress}</td>
-                                    <td>${anomaly.Message}</td>
-                                </tr>`;
-                                tableBody.append(row);
-                            });
-                        } else {
-                            tableBody.append(
-                                '<tr><td colspan="7">No new anomalies detected.</td></tr>',
-                            );
-                        }
-                    });
-                }
-
-                setInterval(fetchAnomalies, 1000); // Poll every second
-                fetchAnomalies(); // Initial fetch to load anomalies
-            });
-        </script>
     </head>
     <body>
+        <header>
+            <div class="header-left">
+                <span style="font-size: 20px; font-weight: bold">LogSage</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Dashboard</a></li>
+                    <li><a href="/users">Users</a></li>
+                </ul>
+            </nav>
+        </header>
         <h1>Real-Time Anomaly Detection</h1>
+
+        <div id="scatter-plot"></div>
 
         <table id="anomalies-table">
             <thead>
@@ -69,5 +44,71 @@
                 </tr>
             </tbody>
         </table>
+
+        <script>
+            $(document).ready(function () {
+                // Array to keep track of anomalies that have already been displayed
+                let anomaliesSeen = [];
+
+                // Function to check if an anomaly already exists in the 'anomaliesSeen' array
+                function anomalyExists(anomaly, anomalies) {
+                    return anomalies.some(
+                        (existingAnomaly) =>
+                            existingAnomaly.EventTime === anomaly.EventTime &&
+                            existingAnomaly.EventID === anomaly.EventID &&
+                            existingAnomaly.Severity === anomaly.Severity &&
+                            existingAnomaly.AccountName ===
+                                anomaly.AccountName &&
+                            existingAnomaly.IpAddress === anomaly.IpAddress &&
+                            existingAnomaly.Message === anomaly.Message,
+                    );
+                }
+
+                // Function to fetch anomaly data from the server and update the page
+                function fetchAnomalies() {
+                    $.getJSON("/get_anomalies", function (data) {
+                        // Extract new anomalies and the scatter plot div from the JSON response
+                        let newAnomalies = data.anomalies;
+                        let plotDiv = data.plot;
+
+                        // Check if the plotDiv is valid and update the scatter plot container
+                        if (plotDiv && plotDiv.trim() !== "") {
+                            $("#scatter-plot").html(plotDiv);
+                        }
+
+                        // Get the table body element
+                        let tableBody = $("#anomalies-table tbody");
+
+                        // Add new anomalies to the 'anomaliesSeen' array if they don't already exist
+                        newAnomalies.forEach((anomaly) => {
+                            if (!anomalyExists(anomaly, anomaliesSeen)) {
+                                anomaliesSeen.push(anomaly);
+                            }
+                        });
+
+                        // Clear the table before adding all anomalies
+                        tableBody.empty();
+
+                        // Populate the table with the 'anomaliesSeen' data
+                        if (anomaliesSeen.length > 0) {
+                            anomaliesSeen.forEach(function (anomaly) {
+                                let row = `<tr><td>${anomaly.EventTime}</td> <td>${anomaly.EventID}</td> <td>${anomaly.Severity}</td> <td>${anomaly.AccountName}</td> <td>${anomaly.IpAddress}</td> <td>${anomaly.Message}</td> </tr>`;
+                                tableBody.append(row);
+                            });
+                        } else {
+                            // Display a message if no new anomalies are detected
+                            tableBody.append(
+                                '<tr><td colspan="7">No new anomalies detected.</td></tr>',
+                            );
+                        }
+                    });
+                }
+
+                // Call the function to fetch anomalies initially
+                fetchAnomalies();
+                // Set an interval to refresh the anomaly data every 10 seconds
+                setInterval(fetchAnomalies, 10000);
+            });
+        </script>
     </body>
 </html>

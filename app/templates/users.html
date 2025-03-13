@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Anomalies by User</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='styles.css') }}"
+        />
+    </head>
+    <body>
+        <header>
+            <div class="header-left">
+                <span style="font-size: 20px; font-weight: bold">LogSage</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Dashboard</a></li>
+                    <li><a href="/users">Users</a></li>
+                </ul>
+            </nav>
+        </header>
+        <h1>Anomalies by User</h1>
+
+        <div id="chart-container"></div>
+
+        <div id="user-anomalies-container">
+            <p>Loading...</p>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                // Function to fetch anomalies grouped by user from the server.
+                function fetchAnomaliesByUser() {
+                    $.getJSON("/get_anomalies_by_user", function (data) {
+                        // Extract user data from the JSON response.
+                        let users = data.users;
+                        // Get the container element where user anomaly data will be displayed.
+                        let container = $("#user-anomalies-container");
+                        // Clear the container before adding new data.
+                        container.empty();
+
+                        // Check if there are any users with anomalies.
+                        if (Object.keys(users).length === 0) {
+                            // If no anomalies, display a message.
+                            container.html("<p>No anomalies detected.</p>");
+                            return;
+                        }
+
+                        // Iterate through each user and their anomalies.
+                        $.each(users, function (user, anomalies) {
+                            // Create a section for each user's anomalies.
+                            let userSection = `<div class="user-section">
+                                <h2>${user}</h2>
+                                <p><strong>Total Anomalies:</strong> ${anomalies.length}</p>
+                                <p><strong>Most Recent Event:</strong> ${anomalies[0].EventTime}</p>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Event Time</th>
+                                            <th>Event ID</th>
+                                            <th>Severity</th>
+                                            <th>IP Address</th>
+                                            <th>Message</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`;
+
+                            // Add each anomaly as a row in the table.
+                            anomalies.forEach((anomaly) => {
+                                userSection += `<tr>
+                                    <td>${anomaly.EventTime}</td>
+                                    <td>${anomaly.EventID}</td>
+                                    <td>${anomaly.Severity}</td>
+                                    <td>${anomaly.IpAddress}</td>
+                                    <td>${anomaly.Message}</td>
+                                </tr>`;
+                            });
+
+                            // Close the table and add the user section to the container.
+                            userSection += `</tbody></table>
+                                </div>`;
+                            container.append(userSection);
+                        });
+
+                        // Plot the bar chart for anomaly counts using Plotly.
+                        var trace = {
+                            x: data.chart_data.users, // User names
+                            y: data.chart_data.anomaly_counts, // Anomaly counts
+                            type: "bar",
+                            marker: {
+                                color: "red", // Red color for all bars
+                            },
+                        };
+
+                        var layout = {
+                            title: "Anomaly Counts by User",
+                            xaxis: {
+                                title: "User Name",
+                            },
+                            yaxis: {
+                                title: "Anomaly Count",
+                            },
+                        };
+
+                        var chartData = [trace];
+                        Plotly.newPlot("chart-container", chartData, layout);
+                    });
+                }
+
+                // Call the function to fetch and display anomalies on page load.
+                fetchAnomaliesByUser();
+                // Set an interval to refresh the anomaly data every 10 seconds.
+                setInterval(fetchAnomaliesByUser, 10000);
+            });
+        </script>
+    </body>
+</html>
