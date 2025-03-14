@@ -2,7 +2,7 @@ body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
     margin: 0;
-    background-color: #121212;
+    background-color: #000;
     color: #f0f0f0;
     display: flex;
     flex-direction: column;
@@ -143,21 +143,25 @@ td {
 }
 
 header {
-    background-color: #333;
+    background-color: #000;
     color: white;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border: 1px solid white; /* Add white border */
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
+header h1 {
+    font-size: 1.5em;
+    margin: 0;
+    font-weight: bold;
+    flex-grow: 1;
+    text-align: center;
 }
 
-.header-left img {
-    height: 40px; /* Adjust as needed */
+header img {
+    height: 40px;
     margin-right: 10px;
 }
 

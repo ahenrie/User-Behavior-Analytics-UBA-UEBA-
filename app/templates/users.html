@@ -14,8 +14,13 @@
     <body>
         <header>
             <div class="header-left">
-                <span style="font-size: 20px; font-weight: bold">LogSage</span>
+                <img
+                    src="{{ url_for('static', filename='LogSageLogo.png') }}"
+                    alt="LogSage Logo"
+                    style="height: 40px; margin-right: 10px"
+                />
             </div>
+            <h1>Log Anomaly Detection</h1>
             <nav>
                 <ul>
                     <li><a href="/">Dashboard</a></li>
@@ -23,7 +28,7 @@
                 </ul>
             </nav>
         </header>
-        <h1>Anomalies by User</h1>
+        <h1>User Stats</h1>
 
         <div id="chart-container"></div>
 

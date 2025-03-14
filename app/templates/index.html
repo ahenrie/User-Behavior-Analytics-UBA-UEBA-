@@ -13,9 +13,12 @@
     </head>
     <body>
         <header>
-            <div class="header-left">
-                <span style="font-size: 20px; font-weight: bold">LogSage</span>
-            </div>
+            <img
+                src="{{ url_for('static', filename='LogSageLogo.png') }}"
+                alt="LogSage Logo"
+                style="height: 40px; margin-right: 10px"
+            />
+            <h1>Log Anomaly Detection</h1>
             <nav>
                 <ul>
                     <li><a href="/">Dashboard</a></li>
@@ -23,7 +26,6 @@
                 </ul>
             </nav>
         </header>
-        <h1>Real-Time Anomaly Detection</h1>
 
         <div id="scatter-plot"></div>
 
